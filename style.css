@@ -1,0 +1,29 @@
+table, td, th {
+	border: 2px solid;
+	text-align: center;
+}
+	
+table {
+	border-collapse: collapse;
+}
+
+td, th {
+	padding-left: 10px;
+	padding-right: 10px;
+}
+
+.DialogWindow{
+	display: none;
+	position: fixed;
+	top: 0px; width: 100%;
+	height: 100%;
+	background-color: rgba(0,0,0,0.4);
+	overflow-y: scroll;
+}
+
+.DialogBox{
+	display: inline-block;
+	background-color: white;
+	margin-top: 150px;
+	margin-bottom: 200px;
+}

@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+	<style></style>
+    <link rel="icon"  sizes="32x32" href="/graphics/icon/favicon32.png">
+    <link rel="icon"  sizes="167x167" href="/graphics/icon/favicon32.png">
+    <link rel="icon"  sizes="180x180" href="/graphics/icon/favicon32.png">
+    <link rel="shortcut icon" sizes="196x196" href="/graphics/icon/favicon196.png">
+	
+	<link rel="stylesheet" href="/style.css">
+    <script type="application/javascript" src="/scripts/buttons.js"></script>
+    <script type="application/javascript" src="/scripts/configen.js"></script>
+    <title>Draw Mode</title>
+</head>
+
+<body style="background-color:black; background-size: 100%; font-family:verdana; margin:0px;">
+    <div  style="width:100%; margin-top:-22px; background-color:gray;">
+		<p style="color:white; padding:8px;">
+			<b style="font-size:2em;">Web <a href="http://filipkrasa.funsite.cz" style="color:white">Fíďy</a> a Lozyho z ITA19</b>
+			<a href="https://sites.google.com/vsps-su.cz/cisco-rs1" target="_blank" rel="noopener noreferrer"><button style="float:right; height:32px; margin:7px;">Other Materials</button></a>
+			<a href="https://subnettingpractice.com/vlsm.html" target="_blank" rel="noopener noreferrer"><button style="float:right; height:32px; margin:7px;">Subnet Calculator</button></a>
+			<button onClick="osimodel()" style="float:right; height:32px; margin:7px;">OSI Model</button>
+			<button onClick="resetDevice()" style="float:right; height:32px; margin:7px;">Reset Device</button>
+		</p>
+	</div>
+	
+<!--====================================================================================================================================================-->
+
+
+<div align="center" style="width: 200px; position: fixed;">
+    <p>
+	<p><button id="router" style="color:white; width: 150px;" onclick="btn_router()"><h3 style="color:black"> Router </h3></button></p>
+	<p><button id="switch" style="color:white; width: 150px;" onclick="btn_switch()"><h3 style="color:black"> Switch </h3></button></p>
+	<p><button id="pc" style="color:white; width: 150px;" onclick="btn_pc()"><h3 style="color:black"> PC </h3></button></p>
+	<p><button id="connect" style="color:white; width: 150px;" onclick="btn_connect()"><h3 style="color:black"> Connect </h3></button></p>
+	<p><button id="remove" style="color:white; width: 150px;" onclick="btn_remove()"><h3 style="color:black"> Remove </h3></button></p>
+	<p id="device" style="color:white"></p>
+	<p id="test" style="color:white"></p>
+	<p id="test1" style="color:white"></p>
+	<p id="test2" style="color:white"></p>
+	<p id="test3" style="color:white"></p>
+	</p>
+	
+</div>
+
+<canvas id = "canvas2"style="position: fixed; margin-left: 200px; margin-top: 16px; background: white"></canvas>
+<canvas id = "canvas" style="position: fixed; margin-left: 200px; margin-top: 16px; background: #00000000"></canvas>
+
+
+<div align="center" id="dialogWindow" class="DialogWindow">
+	<div class="DialogBox">
+		<div style="width: 100%; height: 40px; background-color:gray; margin-top: -20px">
+			<h2 id="dialogHeader" style="padding: 4px; color: white;">Description</h2>
+			<button onClick="closeDialog()" style="float:right; height: 40px; width: 40px; margin-top: -57px;"><h3 style="margin: auto;">X</h3></button>
+		</div>
+		<div id="dialogContent">
+			<div id="inputs" align="center" style="margin:auto;" hidden>
+				<p><b>Hostname </b><input id="hostname" type="text"></p>
+				<p><b>Password </b><input id="password" type="text"></p>
+				<p><b>Secret </b><input id="secret" type="text"></p>
+				<p><b>Remote Access </b><select id="remacc" onchange="RemAcc()"><option value="none">none</option><option value="ssh">SSH</option><option value="telnet">Telnet</option></select><input id="accdom" type="text" style="width:75px;" placeholder="domain.com" hidden><input id="accusr" type="text" style="width:75px;" placeholder="Username" hidden><input id="accpwd" type="text" style="width:75px;" placeholder="Password" hidden></p>
+				<p><b>Password Encryption </b><input id="pwdencrypt" type="checkbox"></p>
+				<p><b>Banner MOTD </b><input id="motd" type="text"></p>
+				<p id="Gateway"><b>Default Gateway </b><input id="gw" type="text" placeholder="192.168.1.254"></p>
+				
+				<fieldset id="vlans" style="display:none;">
+					<legend><b>Vlan </b><button onclick="addVlan()">+</button> <button onclick="rmvVlan()">-</button></legend>
+				</fieldset><p></p>
+				
+				<fieldset id="interfaces" style="display:none;">
+					<legend><b>Interface </b><button onclick="addIF()">+</button> <button onclick="rmvIF()">-</button></legend>
+				</fieldset><p></p>
+				
+				<fieldset id="subInfs" style="display:none;">
+					<legend><b>Sub-interfaces </b><button onclick="addSubInf()">+</button> <button onclick="rmvSubInf()">-</button></legend>
+				</fieldset><p></p>
+				
+				<fieldset id="routes" style="display:none;">
+					<legend><b>IP route </b><button onclick="addRoute()">+</button> <button onclick="rmvRoute()">-</button></legend>
+				</fieldset><p></p>
+				
+				<fieldset id="routesv6" style="display:none;">
+					<legend><b>IPv6 route </b><button onclick="addRoutev6()">+</button> <button onclick="rmvRoutev6()">-</button></legend>
+				</fieldset><p></p>
+				
+				<fieldset id="dhcp" style="display:none;">
+					<legend><b>DHCP pool </b><button onclick="adddhcp()">+</button> <button onclick="rmvdhcp()">-</button></legend>
+				</fieldset><p></p>
+
+				<p><b>Save configuration to flash memory </b><input id="save" type="checkbox"></p>
+				
+			</div>
+			
+			<p align="center"><button id="submit" onclick="goAss()" hidden><h3> submit </h3></button></p>
+			
+			<div id="outdiv"  style="background-color:#C0C0C0; border:2px solid gray; width:500px; align:center; margin:auto;" hidden>
+				<p id="out" style="margin-left:10px; font-family:'Courier New'"></p>
+				<button onclick="cpText()">Copy text</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+<script type="application/javascript" src="scripts/draw.js"></script>
+</body>
+
+</html>
